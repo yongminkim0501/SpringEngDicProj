@@ -1,5 +1,6 @@
 package com.service;
 
+import com.config.JwtTokenProvider;
 import com.domain.User;
 import com.domain.UserRepository;
 import com.domain.Provider;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final JwtTokenProvider jwtTokenProvider;
     @Transactional
     public Long signUp(UserSignUpRequestDto requestDto) {
         // 이메일 중복 검사
@@ -41,15 +42,14 @@ public class UserService {
     }
 
     @Transactional
-    public User login(UserLoginRequestDto requestDto) {
+    public String login(UserLoginRequestDto requestDto) {
         User user = userRepository.findByEmail(requestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
 
-        // 비밀번호 검증
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        return user;
+        return jwtTokenProvider.createToken(user.getEmail());
     }
 }

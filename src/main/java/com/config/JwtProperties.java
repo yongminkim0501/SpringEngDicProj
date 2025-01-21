@@ -10,8 +10,8 @@ public class JwtProperties {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.token-validity-in-millseconds}")
-    private int tokenvalidityInMillseconds;
+    @Value("${jwt.token-validity-in-milliseconds}")
+    private int tokenvalidityInMilliseconds;
 
     private Key key;
 
@@ -21,7 +21,7 @@ public class JwtProperties {
         }
         return key;
     }
-    public long getTokenValidityInMillseconds(){
-        return tokenvalidityInMillseconds;
+    public long getTokenValidityInMilliseconds(){
+        return tokenvalidityInMilliseconds;
     }
 }
